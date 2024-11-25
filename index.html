@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SESI-5-CUYUNIVERSITY</title>
+    <style>
+        #root {
+            font-size: auto;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ini konten kita -->
+    <div id="root">
+        <input type="text" placeholder="username" id="usernameInput" />
+        <input type="password" placeholder="password" id="passwordInput" />
+        <button onclick="onLogin()" id="loginButton">LOGIN</button>
+        <p>Belum punya akun? <a href="#" onclick="showRegister()">Daftar di sini</a></p>
+
+        <button onclick="onLogout()" id="logoutButton">LOGOUT</button>
+        <br />
+        <h1 id="admin">Login sebagai admin</h1>
+        <h1 id="basic">Login sebagai user biasa</h1>
+        <h1 id="owner">Selamat datang OWNER</h1>
+    </div>
+
+    <div id="registerForm" style="display:none">
+        <h1>Form Pendaftaran</h1>
+        <input type="text" id="registerUsername" placeholder="Username baru" />
+        <input type="password" id="registerPassword" placeholder="Password baru" />
+        <button onclick="onRegister()">Daftar</button>
+        <p>Sudah punya akun? <a href="#" onclick="showLogin()">Login di sini</a></p>
+    </div>
+
+    <script type="application/javascript">
+        let usernameInput = document.getElementById('usernameInput');
+        let passwordInput = document.getElementById('passwordInput');
+        let loginButton = document.getElementById('loginButton');
+        let logoutButton = document.getElementById('logoutButton');
+        let admin = document.getElementById('admin');
+        let basic = document.getElementById('basic');
+        let owner = document.getElementById('owner');
+        let registerForm = document.getElementById('registerForm');
+        
+        // Atur tampilan awal
+        admin.style.display = "none";
+        basic.style.display = "none";
+        owner.style.display = "none";
+        logoutButton.style.display = "none";
+        
+        // Fungsi untuk login
+        function onLogin() {
+            const username = usernameInput.value.trim().toLowerCase();
+            const password = passwordInput.value.trim();
+
+            const storedPassword = localStorage.getItem(username);
+
+            if (storedPassword === password) {
+                logoutButton.style.display = "block";
+
+                if (username === "admin") {
+                    localStorage.setItem("role", "admin");
+                    admin.style.display = "block";
+                    basic.style.display = "none";
+                    owner.style.display = "none";
+                } else if (username === "erkayee") {
+                    localStorage.setItem("role", "owner");
+                    owner.style.display = "block";
+                    admin.style.display = "none";
+                    basic.style.display = "none";
+                } else {
+                    localStorage.setItem("role", "basic");
+                    basic.style.display = "block";
+                    admin.style.display = "none";
+                    owner.style.display = "none";
+                }
+
+                usernameInput.style.display = "none";
+                passwordInput.style.display = "none";
+                loginButton.style.display = "none";
+            } else {
+                alert("Password salah!");
+            }
+        }
+
+        // Fungsi untuk logout
+        function onLogout() {
+            localStorage.clear();
+            location.reload();
+        }
+
+        // Fungsi untuk menampilkan form login saat pertama kali memuat halaman
+        window.onload = function () {
+            registerForm.style.display = "none";
+            const storeRole = localStorage.getItem("role");
+
+            if (storeRole) {
+                usernameInput.style.display = "none";
+                passwordInput.style.display = "none";
+                loginButton.style.display = "none";
+                logoutButton.style.display = "block";
+
+                if (storeRole === "admin") {
+                    admin.style.display = "block";
+                } else if (storeRole === "owner") {
+                    owner.style.display = "block";
+                } else {
+                    basic.style.display = "block";
+                }
+            } else {
+                admin.style.display = "none";
+                basic.style.display = "none";
+                owner.style.display = "none";
+                logoutButton.style.display = "none";
+            }
+        }
+
+        // Fungsi untuk menampilkan form pendaftaran
+        function showRegister() {
+            // Sembunyikan form login
+            usernameInput.style.display = "none";
+            passwordInput.style.display = "none";
+            loginButton.style.display = "none";
+            document.querySelector('p').style.display = "none"; // Menyembunyikan text "Belum punya akun?"
+
+            // Tampilkan form pendaftaran
+            registerForm.style.display = "block";
+        }
+
+        // Fungsi untuk menampilkan form login
+        function showLogin() {
+            // Sembunyikan form pendaftaran
+            registerForm.style.display = "none";
+
+            // Tampilkan form login
+            usernameInput.style.display = "block";
+            passwordInput.style.display = "block";
+            loginButton.style.display = "block";
+            document.querySelector('p').style.display = "block";
+        }
+
+        // Fungsi untuk pendaftaran
+        function onRegister() {
+            const newUsername = document.getElementById('registerUsername').value.trim();
+            const newPassword = document.getElementById('registerPassword').value.trim();
+
+            if (localStorage.getItem(newUsername)) {
+                alert("Username sudah digunakan! Silakan gunakan username lain.");
+                return;
+            }
+
+            if (!newPassword) {
+                alert("Password tidak boleh kosong!");
+                return;
+            }
+            localStorage.setItem(newUsername, newPassword);
+            alert("Pendaftaran berhasil! Silakan login.");
+            showLogin();
+        }
+    </script>
+</body>
+
+</html>
