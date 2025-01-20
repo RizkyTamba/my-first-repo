@@ -1,2 +1,2 @@
-# my-first-repo
-Repositori pertama saya untuk proyek X
+# Halo Ini Repositori Pertama Saya
+Repositori pertama saya untuk latihan GitHub
